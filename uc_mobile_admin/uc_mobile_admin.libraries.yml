@@ -1,0 +1,4 @@
+push:
+  version: 2.0.1
+  js:
+    js/uc_mobile_admin.js: {}

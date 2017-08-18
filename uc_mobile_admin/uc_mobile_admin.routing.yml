@@ -1,0 +1,58 @@
+# Auth
+
+uc_mobile_admin.login:
+  path: 'ucmob.login'
+  defaults:
+    _controller: '\Drupal\uc_mobile_admin\Controller\AuthController::login'
+  requirements:
+    _access: 'TRUE'
+
+uc_mobile_admin.deletedevicetoken:
+  path: 'ucmob.deletedevicetoken'
+  defaults:
+    _controller: '\Drupal\uc_mobile_admin\Controller\AuthController::deleteDeviceToken'
+  requirements:
+    _access: 'TRUE'
+
+uc_mobile_admin.updatedevicetoken:
+  path: 'ucmob.updatedevicetoken'
+  defaults:
+    _controller: '\Drupal\uc_mobile_admin\Controller\AuthController::updateDeviceToken'
+  requirements:
+    _access: 'TRUE'
+
+# Orders
+
+uc_mobile_admin.orders:
+  path: 'ucmob.orders'
+  defaults:
+    _controller: '\Drupal\uc_mobile_admin\Controller\OrdersController::main'
+  requirements:
+    _access: 'TRUE'
+
+# Clients
+
+uc_mobile_admin.clients:
+  path: 'ucmob.clients'
+  defaults:
+    _controller: '\Drupal\uc_mobile_admin\Controller\ClientsController::main'
+  requirements:
+    _access: 'TRUE'
+
+# Products
+
+uc_mobile_admin.products:
+  path: 'ucmob.products'
+  defaults:
+    _controller: '\Drupal\uc_mobile_admin\Controller\ProductsController::main'
+  requirements:
+    _access: 'TRUE'
+
+# Push
+
+uc_mobile_admin.push:
+  path: 'ucmob.push'
+  defaults:
+    _controller: '\Drupal\uc_mobile_admin\Controller\PushController::main'
+  requirements:
+    _access: 'TRUE'

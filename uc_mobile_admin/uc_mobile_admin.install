@@ -1,0 +1,54 @@
+<?php 
+ 
+/**
+ * Реализация hook_schema()
+ */
+function uc_mobile_admin_schema() {
+    $schema['user_token_mob_api'] = array(
+        'description' => 'Ubercart mobile admin user tokens.',
+        'fields' => array(
+            'id' => array(
+                'type' => 'serial',
+                'unsigned' => true,
+                'not null' => true,
+            ),
+            'user_id' => array(
+                'type' => 'int',
+                'not null' => true,
+            ),
+            'token' => array(
+                'type' => 'varchar',
+                'length' => 32,
+                'not null' => true,
+            ),
+        ),
+        'primary key' => array('id'),
+    );
+     $schema['user_device_mob_api'] = array(
+        'description' => 'Ubercart mobile amin user devices tokens.',
+        'fields' => array(
+            'id' => array(
+                'type' => 'serial',
+                'unsigned' => true,
+                'not null' => true,
+            ),
+            'user_id' => array(
+                'type' => 'int',
+                'not null' => true,
+            ),
+            'device_token' => array(
+                'type' => 'varchar',
+                'length' => 500,
+                'not null' => false,
+            ),
+            'os_type' => array(
+                'type' => 'varchar',
+                'length' => 20,
+                'not null' => false,
+            ),
+        ),
+        'primary key' => array('id'),
+    );
+
+    return $schema;
+}

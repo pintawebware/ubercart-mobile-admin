@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Ubercart Mobile Admin module.
+ */
+
+define('API_VERSION', '2.0.1');
+define('UC_IN_CHECKOUT_STATUS_ID', 'in_checkout');  // id of pre-order status of order (zero status)
+define('UC_PENDING_STATUS_ID', 'pending');          // id of first status of order
+
+function uc_mobile_admin_page_attachments(array &$page) {
+  if ('/cart/checkout/complete' == $_SERVER['REQUEST_URI']) {
+    $page['#attached']['library'][] = 'uc_mobile_admin/push';
+  }
+}

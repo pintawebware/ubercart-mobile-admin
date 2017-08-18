@@ -1,0 +1,11 @@
+name: Ubercart Mobile Admin
+description: 'Ubercart shop administration from mobile devices'
+author: Pinta Webware
+type: module
+core: 8.x
+version: 2.0
+package: Ubercart - mobile
+dependencies:
+  - rest
+  - uc_order
+  - uc_product
