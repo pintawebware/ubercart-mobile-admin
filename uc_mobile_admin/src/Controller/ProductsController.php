@@ -142,17 +142,16 @@ class ProductsController extends UcMainController {
     if ($products) {
       for ($i = 0; $i < count($products); $i++) {
         $products[$i]->image = $products[$i]->image ? file_create_url($products[$i]->image) : '';
-        if (!$products[$i]->quantity) {
-          $products[$i]->quantity = '0';
-        }
         if (!$products[$i]->category) {
           $products[$i]->category = '';
         }
-        if (!$products[$i]->stock) {
+        if (!$products[$i]->quantity) {
           $query = \Drupal::database()->select('uc_product_stock', 's');
-          $query->addField('s', 'stock', 'quantity');
-          $query->condition('s.sku', $products[$i]->model);
-          $products[$i]->stock = $query->execute()->fetchField();
+          $query->addField('s', 'stock');
+          $query->condition('s.sku', $products[$i]->sku);
+          if (!$products[$i]->quantity = $query->execute()->fetchField()) {
+            $products[$i]->quantity = '0';
+          }
         }
         $products[$i]->currency_code = $this->getCurrency();
       }
@@ -270,10 +269,9 @@ class ProductsController extends UcMainController {
 
     if (!$product) {
       $this->response['error'] = 'Could not find product with id = ' . $this->product_id;
+      return;
     }
-    if (!$product['quantity']) {
-      $product['quantity'] = '0';
-    }
+
     if (!empty($product['description'])) {
       $site = \Drupal::request()->server->get('REQUEST_SCHEME') . '://' . \Drupal::request()->server->get('SERVER_NAME');
       $product['description'] = str_replace('src="/sites/', $site, $product['description']);
@@ -281,11 +279,13 @@ class ProductsController extends UcMainController {
     else {
       $product['description'] = '';
     }
-    if (!$product['stock']) {
+    if (!$product['quantity']) {
       $query = \Drupal::database()->select('uc_product_stock', 's');
-      $query->addField('s', 'stock', 'quantity');
-      $query->condition('s.sku', $product['model']);
-      $product['stock'] = $query->execute()->fetchField();
+      $query->addField('s', 'stock');
+      $query->condition('s.sku', $product['sku']);
+      if (!$product['quantity'] = $query->execute()->fetchField()) {
+        $product['quantity'] = '0';
+      }
     }
 
     $product['status_name'] = $product_statuses->getStatusName($product['status_name']);
@@ -529,8 +529,10 @@ class ProductsController extends UcMainController {
     }
     if ($categories = $this->request->get('categories')) {
       $product->taxonomy_catalog = [];
-      foreach ($categories as $id) {
-        $product->taxonomy_catalog[] = ['target_id' => $id,];
+      if (is_array($categories)) {
+        foreach ($categories as $id) {
+          $product->taxonomy_catalog[] = ['target_id' => $id,];
+        }
       }
     }
     if ($files_images = $this->request->files->get('image')) {
@@ -585,7 +587,7 @@ class ProductsController extends UcMainController {
     if ($product->save()) {
       $this->response['response'] = [
         'product_id' => $this->product_id,
-        'images'     => $this->getImages(),
+        'images' => $this->getImages(),
       ];
       $this->response['status'] = TRUE;
     }
@@ -601,10 +603,10 @@ class ProductsController extends UcMainController {
     $uid = $this->userToken->getUserID();
 
     $product = [
-      'type'  => 'product',
+      'type' => 'product',
       'model' => $model,
       'title' => $title,
-      'uid'   => $uid,
+      'uid' => $uid,
     ];
 
     if (($status = $this->request->get('status')) || ('0' === $status)) {
@@ -672,7 +674,7 @@ class ProductsController extends UcMainController {
 
       $this->response['response'] = [
         'product_id' => $this->product_id,
-        'images'     => $this->getImages(),
+        'images' => $this->getImages(),
       ];
       $this->response['status'] = TRUE;
     }
@@ -861,13 +863,13 @@ class ProductsController extends UcMainController {
     $query = \Drupal::database()->update('node__uc_product_image');
     $query->fields(['delta' => $delta]);
     $query->condition('uc_product_image_target_id', $image_id);
-    $query->condition('i.entity_id', $this->product_id);
+    $query->condition('entity_id', $this->product_id);
     $query->execute();
 
     $query = \Drupal::database()->update('node_revision__uc_product_image');
     $query->fields(['delta' => $delta]);
     $query->condition('uc_product_image_target_id', $image_id);
-    $query->condition('i.entity_id', $this->product_id);
+    $query->condition('entity_id', $this->product_id);
     $query->condition('revision_id', $revision_id);
     $query->execute();
   }

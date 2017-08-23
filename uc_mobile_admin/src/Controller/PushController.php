@@ -53,7 +53,7 @@ class PushController extends ControllerBase {
         'new_order'  => [
           'order_id'      => $order_id,
           'total'         => $total,
-          'currency_code' => $order['currency_code'],
+          'currency_code' => $order['currency'],
           'site_url'      =>$site_url,
         ],
         'event_type' => 'new_order'
@@ -62,7 +62,7 @@ class PushController extends ControllerBase {
         'new_order'  => [
           'order_id'      => $order_id,
           'total'         => $total,
-          'currency_code' => $order['currency_code'],
+          'currency_code' => $order['currency'],
           'site_url'      => $site_url,
         ],
         'event_type' => 'new_order'

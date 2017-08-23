@@ -827,7 +827,7 @@ class OrdersController extends OrderOrientedController {
       return;
     }
 
-    $query = \Drupal::database()->select('uc_orders', o);
+    $query = \Drupal::database()->select('uc_orders', 'o');
     $query->addField('o', 'order_status');
     $query->condition('o.order_id', $this->order_id);
     $old_id = $query->execute()->fetchField();
@@ -854,13 +854,22 @@ class OrdersController extends OrderOrientedController {
       return;
     }
 
+    switch ($this->request->get('inform', 0)) {
+      case 'true':
+      case '1':
+        $inform = 1;
+        break;
+      default:
+        $inform = 0;
+    }
+
     $query = \Drupal::database()->insert('uc_order_comments');
     $query->fields([
       'order_id' => $this->order_id,
       'uid' => $this->userToken->getUserID(),
       'message' => $this->request->get('comment', '-'),
       'order_status' => $new_id,
-      'notified' => $this->request->get('inform', 0),
+      'notified' => $inform,
       'created' => $time,
     ]);
     $query->execute();
